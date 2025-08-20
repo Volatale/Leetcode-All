@@ -8,3 +8,9 @@ dependencies = [
     "mypy>=1.17.1",
     "ruff>=0.12.9",
 ]
+
+[dependency-groups]
+dev = [
+    "icecream>=2.1.7",
+    "memory-profiler>=0.61.0",
+]
