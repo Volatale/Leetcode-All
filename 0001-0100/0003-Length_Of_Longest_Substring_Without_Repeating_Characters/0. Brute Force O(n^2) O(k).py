@@ -6,8 +6,6 @@
 # * Since the maximum number of occurrences for ANY valid substring is 1, we can use a Set
 # *     - If the current character already exists in the set, then we can't extend the substring anymore
 
-from __future__ import annotations
-
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
@@ -23,9 +21,8 @@ class Solution:
                 if s[j] in unique:
                     break
 
-                longest = max(
-                    longest, j - i + 1
-                )  # j - i + 1 gets the length of the substring
+                # j - i + 1 gets the length of the substring
+                longest = max(longest, j - i + 1)
                 unique.add(s[j])
 
         return longest
@@ -35,5 +32,6 @@ class Solution:
 # It takes O(1) to create the set, and likely O(1) to clear it
 # set.add() is also likely an O(1) operation
 
-# Space: O(n) - In the worst case, every character in the substring is unique
+# Space: O(k) - In the worst case, every character in the substring is unique
 # Thus, the set can grow to be of equal size to the input
+# However, technically the set's size is bounded by 26 (because we are only dealing with lowercase ASCII)

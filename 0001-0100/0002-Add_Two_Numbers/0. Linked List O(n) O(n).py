@@ -11,15 +11,21 @@
 # *     - In other words, place value is a relevant concept and we need to be able to handle those cases
 # ! Since we need to return a linked list, we should use the "dummy node" technique to avoid edge cases
 
+from __future__ import annotations
+from optparse import Option
+from typing import Optional
+
 
 class ListNode:
-    def __init__(self, val: int = 0, next: ListNode | None = None):
+    def __init__(self, val: int = 0, next: Optional[ListNode] = None) -> None:
         self.val = val
         self.next = next
 
 
 class Solution:
-    def addTwoNumbers(self, l1: ListNode | None, l2: ListNode | None) -> ListNode:
+    def addTwoNumbers(
+        self, l1: Optional[ListNode], l2: Optional[ListNode]
+    ) -> Optional[ListNode]:
         dummy: ListNode = ListNode(-1)  # To attach the first node to
         curr: ListNode = dummy
 
@@ -27,16 +33,15 @@ class Solution:
         left = l1
         right = l2
 
-        # Used to handle overflows in place value (a + b > 9)
+        # Used to handle overflows in place value (where a + b > 9)
         carry: int = 0
 
         while left or right or carry:
-            # Start with the carry
-            sum = carry
+            sum: int = carry  # Start with the carry
 
             if left:
-                sum += left.val
-                left = left.next  # Move to the next
+                sum += left.val  # Add the current node's value
+                left = left.next  # Move to the next node
 
             if right:
                 sum += right.val
@@ -46,6 +51,7 @@ class Solution:
             # 9 + 4 = 13, so we know the NEXT column should have an extra ten added to it (1 ten = 10 ones)
             carry = sum // 10
             curr.next = ListNode(sum % 10)
+            curr = curr.next
 
         return dummy.next
 

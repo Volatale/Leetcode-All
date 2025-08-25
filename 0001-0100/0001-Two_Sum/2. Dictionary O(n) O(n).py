@@ -37,6 +37,6 @@ print(sol.twoSum([2, 7, 11, 15], 9))  # * [0, 1]
 print(sol.twoSum([1, 2, 3], 4))  # * [0, 2]
 print(sol.twoSum([1, 1], 2))  # * [0, 1]
 
-# * Time: O(n^2) - We have a pair of nested loops, both of which scale with `n`
+# * Time: O(n) - We have a pair of nested loops, both of which scale with `n`
 
 # * Space: O(1) - The memory usage remains constant regardless of input size
