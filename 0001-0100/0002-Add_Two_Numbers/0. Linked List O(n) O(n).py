@@ -12,7 +12,6 @@
 # ! Since we need to return a linked list, we should use the "dummy node" technique to avoid edge cases
 
 from __future__ import annotations
-from optparse import Option
 from typing import Optional
 
 
