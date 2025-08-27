@@ -41,7 +41,10 @@
 # ! Technically, it is possible to binary search BOTH sides
 # *     - So we should always binary search on the SMALLER of the inputs whenever possible
 # *     - This reduces the time complexity
-from xml.sax.handler import all_features
+# ! Why do we use infinity to handle out of bounds accesses?
+# *     - Because the arrays are SORTED, which implies monotonicity
+# *     - Therefore, the minimum possible element is NEGATIVE infinity
+# *     - And the largest possible element is POSITIVE infinity
 
 
 class Solution:
@@ -64,7 +67,7 @@ class Solution:
         while left <= right:
             # Get cut boundaries (mid points) -> There should be `k` elements on the left
             i: int = left + ((right - left) >> 1)
-            j: int = K - 1
+            j: int = K - i
 
             # Valid partition conditions
             aLeft = nums1[i - 1] if i > 0 else float("-inf")
