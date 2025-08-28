@@ -45,46 +45,66 @@
 # *     - Because the arrays are SORTED, which implies monotonicity
 # *     - Therefore, the minimum possible element is NEGATIVE infinity
 # *     - And the largest possible element is POSITIVE infinity
+# * Another way to look at this is: (max(A[i-1], B[j-1]) <= min(A[i], B[j]))
+# *     - max(A[i-1], B[j-1]) = the largest element in the (combined) left side
+# *     - min(A[i], B[j]) = the largest element in the (comnined) right side
+# * If not, then:
+# *     - If A[i-1] > B[j], we took too many from A (shift left cut)
+# *     - If B[j-1] > A[i], we took too few from A (shift cut right)
+# ! Variable name explanations:
+# *     - aLeftMax = largest value in nums1's LEFT partition
+# *     - aRightMin = smallest value in nums1's RIGHT partition
+# *     - bLeftMAx = largest value in nums2's LEFT partition
+# *     - bRightMin = smallest value in nums2's RIGHT partition
+# * If aLeftMax > bRightMin
+# *     - The LARGEST in nums1's left partition is GREATER than the SMALLEST in nums2's right partition
+# *     - Thus, we need to take LESS elements from nums1 (hence right = i - 1)
+# * if bLeftMax > aRightMin
+# *     - The LARGEST in nums2's left partition is GREATER than the SMALLEST in nums2's right partition
+# *     - Thus, we need to take MORE elements from nums2 (hence left = i + 1)
 
 
 class Solution:
     def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
+        # Ensure A is the smaller array (so we always binary search the smaller of the two)
         if len(nums1) > len(nums2):
-            return self.findMedianSortedArrays(nums2, nums1)
+            nums1, nums2 = nums2, nums1
 
         # Get the lengths of the inputs
         n: int = len(nums1)
         m: int = len(nums2)
+        total: int = n + m
 
-        # K = Total no. of elements across BOTH arrays
-        T: int = n + m
-        K = T // 2
+        # Size of the (combined) left partition
+        # +1 to ensure left always has the extra element (in case of odd total length)
+        half: int = (total + 1) // 2
 
         # We are searching over the full "cut space" in `nums1` (including nth index)
         left: int = 0
         right: int = n
 
         while left <= right:
-            # Get cut boundaries (mid points) -> There should be `k` elements on the left
-            i: int = left + ((right - left) >> 1)
-            j: int = K - i
+            i: int = left + ((right - left) >> 1)  # Cut index in `nums1`
+            j: int = half - i  # Cut index in `nums2`
 
             # Valid partition conditions
-            aLeft = nums1[i - 1] if i > 0 else float("-inf")
-            aRight = nums1[i] if i < n else float("inf")
-            bLeft = nums2[j - 1] if j > 0 else float("-inf")
-            bRight = nums2[j] if j < m else float("inf")
+            aLeftMax = nums1[i - 1] if i > 0 else float("-inf")
+            aRightMin = nums1[i] if i < n else float("inf")
+            bLeftMax = nums2[j - 1] if j > 0 else float("-inf")
+            bRightMin = nums2[j] if j < m else float("inf")
 
-            # If max(aLeft, bLeft) <= min(aRight, bRight)
-            if aLeft <= bRight and bLeft <= aRight:
-                if T & 1:
-                    return min(aRight, bRight)
+            # if max(aRightMin, bRightMin) <= min(aLeftMax, bLeftMax):
+            if aLeftMax <= bRightMin and bLeftMax <= aRightMin:
+                if total & 1:
+                    # Extra element is in the LEFT partition
+                    return max(aLeftMax, bLeftMax)
                 else:
-                    return (max(aLeft, bLeft) + min(aRight, bRight)) / 2
-            elif aLeft > bRight:
-                right = i - 1  # `i` is too large, search left
-            else:
-                left = i + 1  # `i` is too small, search right
+                    # Average of the maximum of the lefts and the minimum of the rights
+                    return (max(aLeftMax, bLeftMax) + min(aRightMin, bRightMin)) / 2
+            elif aLeftMax > bRightMin:
+                right = i - 1  # We took too many elements from `nums1`, move left
+            elif bLeftMax > aRightMin:
+                left = i + 1  # We took too few elements from `nums1`, move right
 
 
 # * Time: O(log(min(n,))) - We perform a binary search on the SMALLEST of the two arrays (hence min)
