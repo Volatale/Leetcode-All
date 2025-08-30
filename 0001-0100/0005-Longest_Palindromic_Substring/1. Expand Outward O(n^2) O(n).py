@@ -6,7 +6,7 @@
 # ! However, this is a relatively slow approach
 # * Ultimately, this problem comes down to:
 # *     - Dynamic programming - O(n^2) O(n^2)
-# *     - An alternative DP approach - O(n^2) O(1)
+# *     - Expand outward from every index - O(n^2) O(1)
 # *     - Manacher's Algorithm - O(n) O(n)
 # * Here, we'll go with the alternative to DP
 # * There are two types of palindromes:
