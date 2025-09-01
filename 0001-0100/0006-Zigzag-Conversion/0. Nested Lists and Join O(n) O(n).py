@@ -1,4 +1,4 @@
-# 5. Zigzag Conversion
+# 6. Zigzag Conversion
 
 # * We are given a string `s` that is written in zigzag style
 # *      P   A   H   N
@@ -9,15 +9,22 @@
 # * Then, as we already know, concatenate all of the rows from top to bottom
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
+        # * No zigzag is present, so just return the string itself
+        if numRows == 1:
+            return s
+
         letters: list[list[str]] = [[] for _ in range(numRows)]
-        row = 0
-        increasing = True  # Whether or not to increase or decrease the row
+        row: int = 0
+        increasing: bool = True  # Whether or not to increase or decrease the row
 
         # Iterate over every character and determine where to put it
         for i in range(len(s)):
             letters[row].append(s[i])
 
-            row += 1 if increasing else -1
+            if increasing:
+                row += 1  # Go down
+            else:
+                row -= 1  # Go up
 
             # Swap directions if necessary
             if row == 0 or row == numRows - 1:
@@ -30,6 +37,7 @@ class Solution:
 sol = Solution()
 print(sol.convert("PAYPALISHIRING", 3))  # PAHNAPLSIIGYIR
 print(sol.convert("SONICTHEHEDGEHOG", 4))  # SHEOTEGHNCHDOIEG
+print(sol.convert("AB", 1))  # AB
 
 # * Time: O(n) - It takes O(numRows) to create the letters list
 # * Then, we iterate over the entire input string which takes O(n)
