@@ -11,6 +11,16 @@
 # *         matrix[0][j] = 0
 # * Iterate through the matrix once more, and zero out the cell if either the marked row or column is 0
 # * Finally, handle the zeroing of the first row and column if necessary
+
+# * Basically, when modifying the matrix, we iterate from i = 1, j = 1 and onwards
+# *     - In other words, we iterate over a rectangle of the shape
+# *       [1][1] -> [m-1][n-1]
+# *     - Row 0 and col 0 are excluded
+# * row 0 and col 0 are used to indicate whether the entire row/col gets 0'd out
+# * Additionally, we need to mark whether the 0th row and col get zeroed BEFORE doing anything
+# *     - Why? Because otherwise, we may get false positives
+# *       The 0th row/column may not have originally had 0s, but it may after the modifications
+# *     - Therefore, it would be almost guaranteed that we have to clear the row/col, but it could lead to issues
 class Solution:
     def setZeroes(self, matrix: list[list[int]]) -> None:
         m: int = len(matrix)
